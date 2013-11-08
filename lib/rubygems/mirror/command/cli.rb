@@ -30,7 +30,7 @@ module Rubygems
         desc "fetch", "fetch all the necessary files to the server."
         def fetch
           fetch_allgems
-          fetch_basefile
+          fetch_basefiles
           fetch_gemspecs
         end
 
