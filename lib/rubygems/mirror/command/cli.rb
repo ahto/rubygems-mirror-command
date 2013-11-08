@@ -90,7 +90,7 @@ module Rubygems
         def fetch
           fetch_allgems(false)
           fetch_basefiles(false)
-          fetch_gemspecs(false)
+          fetch_gemspecs(false, false)
           exit 0 #signal successful exit
         end
 
@@ -109,17 +109,22 @@ module Rubygems
         end
 
         desc "fetch_gemspecs", "fetch only gemspec files."
-        def fetch_gemspecs(exit_successfully=true)
+        def fetch_gemspecs(skip_existing=false, exit_successfully=true)
           @pool = Gem::Mirror::Pool.new(parallelism)
 
           say "fetch gemspecs start!", :GREEN
           Dir::foreach(File.join(to,'gems')) do |filename|
+            next if filename == "." or filename == ".."
+            gem_name = File.basename filename, ".gem"
+            gem_path = File.join(GEMSPECS_DIR, "#{gem_name}.gemspec.rz")
+            if skip_existing && File.exist?(File.join(to,gem_path))
+              say "Skipping -> #{gem_name}.gemspec.rz", :BLUE
+              next
+            end
 
             @pool.job do
-              next if filename == "." or filename == ".."
-              gem_name = File.basename filename, ".gem"
-              say " -> #{gem_name}.gemspec.rz", :BLUE
-              _fetch(File.join(GEMSPECS_DIR, "#{gem_name}.gemspec.rz"))
+              say " -> #{gem_name}.gemspec.rz", :GREEN
+              _fetch(gem_path)
             end
 
           end
