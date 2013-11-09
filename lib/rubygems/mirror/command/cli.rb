@@ -87,10 +87,10 @@ module Rubygems
         GEMSPECS_DIR = "quick/Marshal.#{Gem.marshal_version}/"
 
         desc "fetch", "fetch all the necessary files to the server."
-        def fetch
+        def fetch(skip_existing=false)
           fetch_allgems(false)
           fetch_basefiles(false)
-          fetch_gemspecs(false, false)
+          fetch_gemspecs(skip_existing, false)
           exit 0 #signal successful exit
         end
 
