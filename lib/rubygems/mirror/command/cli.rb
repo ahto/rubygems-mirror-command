@@ -82,6 +82,7 @@ module Rubygems
           "Marshal.#{Gem.marshal_version}.Z",
           "yaml",
           "quick/latest_index.rz",
+          "prerelease_specs.#{Gem.marshal_version}.gz",
         ]
 
         GEMSPECS_DIR = "quick/Marshal.#{Gem.marshal_version}/"
